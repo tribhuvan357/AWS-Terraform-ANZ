@@ -1,0 +1,91 @@
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  AWS Terraform Notes >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+aws configure
+where terraform
+choco upgrade terraform -y  => Run as a admin from CMD/Powershell
+terraform version
+terraform -version
+
+
+Terraform Config
+. It uses .tf extension
+. Format is HCL (Hashicorp Config Language)
+· Declarative Language
+· State Management
+
+
+=> AWS EC2 with terraform
+
+main.tf
+variables.tf
+provider.tf
+resource.tf
+terraform.tfstate
+terraform.tfstate.backup
+.terraform.lock.hcl
+.terraform.tfstate.lock.info
+{"ID":"48a0ab83-7e31-6c11-4b72-0e88e2d354d9","Operation":"OperationTypeApply","Info":"","Who":"Tribhuvan_PC\\Tribhuvan@Tribhuvan_PC","Version":"1.12.2","Created":"2025-08-10T07:57:59.3343403Z","Path":"terraform.tfstate"}
+.terraform\providers\registry.terraform.io\hashicorp\aws\6.7.0\windows_amd64 => LICENSE and terraform-provider-aws_v6.7.0_x5
+
+
+=> Terraform execution command
+
+terraform init
+terraform plan    => if we made changes we need to plan everytime else it will execute old/previous code
+terraform apply
+terraform apply -auto-approve
+terraform destroy
+terraform destroy -auto-approve
+terraform validate
+
+----------------------------------------------------------------------------------------------------------
+
+vol-0cdabccda027cb76e /dev/xvda 20  => EC2 storage console details
+
+[root@ip-172-31-14-57 ~]# df -hT    => EC2 linux server OS level storage details
+Filesystem       Type      Size  Used Avail Use% Mounted on
+devtmpfs         devtmpfs  4.0M     0  4.0M   0% /dev
+tmpfs            tmpfs     453M     0  453M   0% /dev/shm
+tmpfs            tmpfs     181M  436K  181M   1% /run
+/dev/nvme0n1p1   xfs        20G  1.7G   19G   9% /
+tmpfs            tmpfs     453M     0  453M   0% /tmp
+/dev/nvme0n1p128 vfat       10M  1.3M  8.7M  13% /boot/efi
+tmpfs            tmpfs      91M     0   91M   0% /run/user/1000
+[root@ip-172-31-14-57 ~]#
+[root@ip-172-31-14-57 ~]# lsblk
+NAME          MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS
+nvme0n1       259:0    0  20G  0 disk
+├─nvme0n1p1   259:1    0  20G  0 part /
+├─nvme0n1p127 259:2    0   1M  0 part
+└─nvme0n1p128 259:3    0  10M  0 part /boot/efi
+[root@ip-172-31-14-57 ~]#
+[root@ip-172-31-14-57 ~]#
+-----------------------------------------------------------------------------------------------------------
+
+=> Resource Change
+
+We can change the AMI ID/image and instance type to the current/prevoius terraform file and do terraform apply which will destroy the current ec2 server and make the ec2 server with given details
+
+=> Resource Destroy 
+
+=> More about TF Config
+
+State Management
+
+The state file (terraform.tfstate) maintains a detailed record of the current state of managed resources
+
+This state file can be stored locally or remotely, with remote storage options enabling collaboration by sharing the state across teams and environments.
+
+=> Terraform Variable
+
+Input variables => are like function arguments.
+Output values   => are like function return values.
+Local values    => are like a function's temporary local variables.
+
+=> Terraform Output
+To print the public/private, ami id and provisioning server aws instance id etc in terraform cli 
+
+=> AWS Resource S3 bucket and Ramdom Provider(for bucket name)
+AWS S3 (Amazon Simple Storage Service) is a scalable, high-speed, web-based cloud storage service designed for online backup and archiving of data and applications.
+
+
+=> Remote State Management
