@@ -89,3 +89,25 @@ AWS S3 (Amazon Simple Storage Service) is a scalable, high-speed, web-based clou
 
 
 => Remote State Management
+
+=============================================================================================================================
+<<<<<< Github Repo >>>>>
+
+Note:- always first create repo manually on github portal and then follow the below steps
+
+git init
+git remote add origin https://github.com/tribhuvan357/AWS-Terraform-ANZ.git
+git pull origin master
+git status
+git commit -m "all ANZ AWS terraform pracs"
+git status
+pwd
+git add .
+git status
+git commit -m "all ANZ AWS terraform pracs"
+git status
+git push -u origin master
+
+
+
+=============================================================================================================================
