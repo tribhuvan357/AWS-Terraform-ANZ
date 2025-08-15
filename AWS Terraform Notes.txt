@@ -111,4 +111,11 @@ git push -u origin master
 =============================================================================================================================
 
 => Remote State Management
+Done => github updated
 
+
+=> Project static website host
+Done => github updated
+
+
+=> AWS VPC via Terraform
