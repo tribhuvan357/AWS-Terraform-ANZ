@@ -88,8 +88,6 @@ To print the public/private, ami id and provisioning server aws instance id etc 
 AWS S3 (Amazon Simple Storage Service) is a scalable, high-speed, web-based cloud storage service designed for online backup and archiving of data and applications.
 
 
-=> Remote State Management
-
 =============================================================================================================================
 <<<<<< Github Repo >>>>>
 
@@ -111,3 +109,6 @@ git push -u origin master
 
 
 =============================================================================================================================
+
+=> Remote State Management
+

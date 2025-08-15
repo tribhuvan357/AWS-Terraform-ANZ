@@ -34,6 +34,5 @@ resource "aws_s3_object" "main" {
 }
 
 output "S3-bucket-name-output" {
-  value = aws_s3_bucket.main.id
-  #value = random_id.main.hex
+  value = random_id.main.hex
 }
