@@ -63,12 +63,47 @@ resource "aws_route_table" "main" {
   }
 }
 
-# assoicating the newly created route table with public subnet 
+# Assoicating the newly created route table with public subnet 
 resource "aws_route_table_association" "main" {
   route_table_id = aws_route_table.main.id
   subnet_id      = aws_subnet.public.id
 }
 
+# Creating Public EC2 instance for testing purpose
+resource "aws_instance" "public_main" {
+  ami           = "ami-0d54604676873b4ec"
+  instance_type = "t3.micro"
+  key_name      = "my-ec2-devops-terraform"
+  subnet_id     = aws_subnet.public.id
+
+  root_block_device {
+    volume_size           = "20"
+    volume_type           = "gp2"
+    delete_on_termination = "true"
+  }
+
+  tags = {
+    Name = "Web-Server-MyVPC"
+  }
+}
+
+# Creating Private EC2 instance for testing purpose
+resource "aws_instance" "private_main" {
+  ami           = "ami-0d54604676873b4ec"
+  instance_type = "t3.micro"
+  key_name      = "my-ec2-devops-terraform"
+  subnet_id     = aws_subnet.private.id
+
+  root_block_device {
+    volume_size           = "20"
+    volume_type           = "gp2"
+    delete_on_termination = "true"
+  }
+
+  tags = {
+    Name = "DB-Server-MyVPC"
+  }
+}
 
 output "Terraform-VPC-ID" {
   value = aws_vpc.main.id
@@ -90,3 +125,10 @@ output "Terraform-VPC-Routing-Table" {
   value = aws_route_table.main.id
 }
 
+output "Terraform-VPC-Public-Server" {
+  value = aws_instance.public_main.id
+}
+
+output "Terraform-VPC-Private-Server" {
+  value = aws_instance.private_main.id
+}

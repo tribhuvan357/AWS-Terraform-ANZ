@@ -142,5 +142,5 @@ Exercise on VPC:
 Done => AWS lab performed for VPC Terraform
 
 => EC2 instance using our VPC Terraform
-  
+Done =>  AWS VPC Manual Lab 
 
