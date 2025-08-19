@@ -36,6 +36,13 @@ terraform apply -auto-approve
 terraform destroy
 terraform destroy -auto-approve
 terraform validate
+terraform fmt     => For the coorect formate
+
+
+=> Github repo repository name
+
+tribhuvan357/AWS-Terraform-ANZ 
+https://github.com/tribhuvan357/AWS-Terraform-ANZ
 
 ----------------------------------------------------------------------------------------------------------
 
@@ -119,3 +126,21 @@ Done => github updated
 
 
 => AWS VPC via Terraform
+Done => AWS Manual Lab
+
+=> VPC Creation Terraform Config
+
+Exercise on VPC:
+
+· A VPC with a CIDR block of 10.0.0.0/16.
+· One public subnet with a CIDR block of 10.0.1.0/24.
+· One private subnet with a CIDR block of 10.0.2.0/24.
+· One Internet Gateway.
+· One public route table with a route to the Internet Gateway,
+  and the correct association between the public subnet and the public route table.
+
+Done => AWS lab performed for VPC Terraform
+
+=> EC2 instance using our VPC Terraform
+  
+

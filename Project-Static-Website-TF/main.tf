@@ -1,11 +1,11 @@
 terraform {
   required_providers {
     aws = {
-      source = "hashicorp/aws"
+      source  = "hashicorp/aws"
       version = "6.7.0"
     }
     random = {
-      source = "hashicorp/random"
+      source  = "hashicorp/random"
       version = "3.7.2"
     }
   }
@@ -21,7 +21,7 @@ provider "aws" {
 
 resource "random_id" "main" {
   byte_length = 10 # To generate the random numbers which can help in making unique S3 bucket name
-  }
+}
 
 resource "aws_s3_bucket" "main" {
   bucket = "mywebapp-demo-bucket-${random_id.main.hex}"
@@ -31,17 +31,17 @@ resource "aws_s3_bucket_policy" "main" {
   bucket = aws_s3_bucket.main.id
   policy = jsonencode(
     {
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "PublicReadGetObject",
-      "Effect": "Allow",
-      "Principal": "*",
-      "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::${aws_s3_bucket.main.id}/*"
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Sid" : "PublicReadGetObject",
+          "Effect" : "Allow",
+          "Principal" : "*",
+          "Action" : "s3:GetObject",
+          "Resource" : "arn:aws:s3:::${aws_s3_bucket.main.id}/*"
+        }
+      ]
     }
-  ]
-}
   )
 }
 
@@ -63,17 +63,17 @@ resource "aws_s3_bucket_public_access_block" "main" {
 }
 
 resource "aws_s3_object" "index" {
-    bucket = aws_s3_bucket.main.bucket
-    source = "./index.html"
-    key = "index.html"
-    content_type = "text/html"
+  bucket       = aws_s3_bucket.main.bucket
+  source       = "./index.html"
+  key          = "index.html"
+  content_type = "text/html"
 }
 
 resource "aws_s3_object" "styles" {
-    bucket = aws_s3_bucket.main.bucket
-    source = "./styles.css"
-    key = "styles.css"
-    content_type = "text/css"
+  bucket       = aws_s3_bucket.main.bucket
+  source       = "./styles.css"
+  key          = "styles.css"
+  content_type = "text/css"
 }
 
 output "S3-bucket-name" {

@@ -1,0 +1,92 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.7.0"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "3.7.2"
+    }
+  }
+}
+
+provider "random" {
+  # Configuration options
+}
+
+provider "aws" {
+  region = "ap-south-1"
+}
+
+
+# Create a VPC
+resource "aws_vpc" "main" {
+  cidr_block = "10.0.0.0/16"
+  tags = {
+    Name = "My-VPC-Terraform"
+  }
+}
+
+# Create a public subnet
+resource "aws_subnet" "public" {
+  vpc_id     = aws_vpc.main.id
+  cidr_block = "10.0.1.0/24"
+  tags = {
+    Name = "My-Public-Subnet-Terrform"
+  }
+}
+
+# Create a private subnet
+resource "aws_subnet" "private" {
+  vpc_id     = aws_vpc.main.id
+  cidr_block = "10.0.2.0/24"
+  tags = {
+    Name = "My-Private-Subnet-Terrform"
+  }
+}
+
+# Create Inetrnet Gateway IGW
+resource "aws_internet_gateway" "main" {
+  vpc_id = aws_vpc.main.id
+  tags = {
+    Name = "My-IGW-Terraform"
+  }
+}
+
+# Create Routing Table
+resource "aws_route_table" "main" {
+  vpc_id = aws_vpc.main.id
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.main.id
+  }
+}
+
+# assoicating the newly created route table with public subnet 
+resource "aws_route_table_association" "main" {
+  route_table_id = aws_route_table.main.id
+  subnet_id      = aws_subnet.public.id
+}
+
+
+output "Terraform-VPC-ID" {
+  value = aws_vpc.main.id
+}
+
+output "Terraform-VPC-Public-Subnet-ID" {
+  value = aws_subnet.public.id
+}
+
+output "Terraform-VPC-Private-Subnet-ID" {
+  value = aws_subnet.private.id
+}
+
+output "Terraform-VPC-IGW" {
+  value = aws_internet_gateway.main.id
+}
+
+output "Terraform-VPC-Routing-Table" {
+  value = aws_route_table.main.id
+}
+
