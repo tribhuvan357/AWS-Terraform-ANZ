@@ -44,7 +44,51 @@ terraform fmt     => For the coorect formate
 tribhuvan357/AWS-Terraform-ANZ 
 https://github.com/tribhuvan357/AWS-Terraform-ANZ
 
-----------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------
+
+<<<<<<<<<< Terraform Resource >>>>>>>>>>
+
+Definition: A resource block creates and manages infrastructure in AWS (or any provider).
+
+Use Case: When you want Terraform to provision, update, or delete something.
+
+Example: Creating an EC2 instance.
+
+resource "aws_instance" "web" {
+  ami           = "ami-0abcdef1234567890"
+  instance_type = "t2.micro"
+}
+
+
+👉 This creates an EC2 instance. If you run terraform destroy, Terraform will also delete it.
+
+<<<<<<<<<< Terraform Data Source >>>>>>>>>>>>
+
+Definition: A data block reads and fetches existing information from the provider without creating anything.
+
+Use Case: When you need to use already existing resources (not managed by Terraform).
+
+Example: Fetching the latest Amazon Linux AMI ID.
+
+data "aws_ami" "amazon_linux" {
+  most_recent = true
+  owners      = ["amazon"]
+
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
+  }
+}
+
+
+👉 This does not create an AMI — it only looks up the latest AMI ID from AWS so you can use it in your resources:
+
+resource "aws_instance" "web" {
+  ami           = data.aws_ami.amazon_linux.id
+  instance_type = "t2.micro"
+}
+
+----------------------------------------------------------------------------------------------------------------------------------------------
 
 vol-0cdabccda027cb76e /dev/xvda 20  => EC2 storage console details
 
@@ -143,4 +187,46 @@ Done => AWS lab performed for VPC Terraform
 
 => EC2 instance using our VPC Terraform
 Done =>  AWS VPC Manual Lab 
+
+=> Project (EC2+VPC+NGINX)
+Project: VPC + EC2 + NGINX + HTTP Access:
+
+· A VPC with pubic and private subnet
+· A EC2 instance using public subnet we created.
+· Setup nginx webserver
+· Create security group rule to enable HTTP access
+· Output the webserver URL on terminal
+
+=> Lab done
+
+=> Terraform Data Source
+
+It allows you to fetch and use information from
+· external sources or
+· existing resources within your cloud infrastructure.
+
+Useful for obtaining dynamic data that you need for our configurations.
+Note:-> How to get the dynamic data from data source
+
+=> Lab pending
+# Note: It might occur charges so be wise
+
+=> Data Source (VPC and SG)
+=> Lab pending
+
+=> EC2 create using data source
+
+Data Source TASK:
+=>Create an EC2 instance using existing
+-VPC
+-private-subnets
+-security-group
+
+=> Code and Lab pending
+
+=> Terraform Variable
+
+
+
+
 
