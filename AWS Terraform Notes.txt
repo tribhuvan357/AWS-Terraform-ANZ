@@ -208,11 +208,11 @@ It allows you to fetch and use information from
 Useful for obtaining dynamic data that you need for our configurations.
 Note:-> How to get the dynamic data from data source
 
-=> Lab pending
+=> Lab Done
 # Note: It might occur charges so be wise
 
 => Data Source (VPC and SG)
-=> Lab pending
+=> Lab Done
 
 => EC2 create using data source
 
@@ -222,9 +222,31 @@ Data Source TASK:
 -private-subnets
 -security-group
 
-=> Code and Lab pending
+=> Lab Done
 
 => Terraform Variable
+
+environment var (least priority) => export TF_VAR_key=value => its use case in senseitive data dealing => Done
+export TF_VAR_my_instance_type=t2.micro    ==> To set the environment variable in Mac/Linux
+$env:TF_VAR_my_instance_type="t2.micro"    ==> To set the environment variable in Windows
+
+terraform.tfvars (most priority)=> done
+*.auto.tfvars    (most priority than above)=> done
+-var & -var-file (most priority than above)=> Pass variables on the CLI with -var or -var-file =>
+==> -var      => terraform apply -var "my_root_block_device={v_size=50, v_type=\""gp2\""}"
+==> -var-file => terraform apply -var-file="terraform.tfvars"
+
+Note:- Multi tagging lab pending
+
+
+=> Local variable
+
+
+
+
+
+
+
 
 
 
