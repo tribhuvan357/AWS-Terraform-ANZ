@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cf-gitops-runtime
+  labels:
+    codefresh.io/entity: runtime
+    codefresh.io/internal: 'true'
+spec:
+  project: cf-runtime-app-project
+  source:
+    repoURL: https://github.com/tribhuvan357/AWS-Terraform-ANZ.git
+    targetRevision: HEAD
+    path: resources/codefresh-minikube/chart
+    helm:
+      releaseName: cf-gitops-runtime
+  destination:
+    namespace: codefresh-minikube
+    server: https://kubernetes.default.svc
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true
