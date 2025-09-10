@@ -1,0 +1,377 @@
+<<<<<<< Codefresh CICD >>>>>>>>
+
+< Codefresh and AWS EKS >
+
+Download the correct binary => Go to Codefresh CLI releases:
+https://github.com/codefresh-io/cli/releases/tag/v0.89.3
+
+
+Move codefresh.exe to a global location
+Move the file:
+move C:\Users\tribh\Downloads\codefresh.exe "C:\Program Files\Codefresh\codefresh.exe"
+
+PS C:\Program Files\Codefresh> .\codefresh.exe version
+client version: 0.89.3
+PS C:\Program Files\Codefresh>
+
+
+Runtime Name => codefresh
+Namespace    => codefresh
+
+
+[[[[ Namespace ]]]]
+
+In Kubernetes, a namespace is like a folder/environment where you keep related resources.
+
+Example:
+default → all default workloads go here
+kube-system → system pods (like DNS, scheduler, controller manager)
+codefresh → where Codefresh GitOps runtime will deploy its own pods
+👉 Think of it like separating different applications so they don’t clash.
+
+kubectl get pods -n codefresh
+This shows all Codefresh-related pods only, without mixing with other apps running in Minikube.
+
+[[[[ Runtime (Codefresh Runtime) ]]]]]
+
+In Codefresh, a runtime is basically the deployment of Codefresh’s GitOps agents inside your cluster.
+It connects your Codefresh SaaS account (in the cloud) with your Kubernetes cluster (on-prem, Minikube, or EKS, etc).
+Each runtime runs in a namespace (like codefresh).
+It includes:
+Argo Workflows (for pipelines)
+Argo CD (for GitOps deployments)
+Codefresh-specific controllers
+
+[[[[ Summary ]]]]
+Namespace → "Where" (Kubernetes side, like folder for pods)
+Runtime → "What/Who" (Codefresh agent that lives inside that namespace and connects to Codefresh SaaS)
+
+------------------------------------------------------------------------------------------------------------------------------
+
+Codefresh API keys
+68b73605d17b210759422ffb.ec3bc59913eb686506f11eaf97798877
+
+curl -s https://raw.githubusercontent.com/codefresh-io/gitops-runtime-helm/HEAD/scripts/verify-argocd-auto-detection.sh | NAMESPACE=argocd bash
+
+
+helm install cf-gitops-runtime \
+    --create-namespace \
+    --namespace codefresh \
+    --set global.codefresh.accountId=68b6a1d588edfd96a3934189 \
+    --set global.codefresh.userToken.token=68b6a4a17e0ba516e9264bfa.bea67aedde02c46070987e6ae42fb539 \
+    --set global.runtime.name=codefresh \
+    --set argo-workflows.controller.workflowDefaults.spec.artifactRepositoryRef.configMap="codefresh-workflows-log-store" \
+    --set argo-workflows.controller.workflowDefaults.spec.artifactRepositoryRef.key="codefresh-workflows-log-store" \
+    --set argo-workflows.controller.workflowDefaults.spec.archiveLogs=true \
+     oci://quay.io/codefresh/gitops-runtime
+
+
+<<<<<<<<<< aws-auth ConfigMap   >>>>>>>>> 
+
+From local PC Powershell
+
+
+PS C:\Program Files\Codefresh> aws eks list-clusters
+{
+    "clusters": [
+        "codefresh-cluster"
+    ]
+}
+
+PS C:\Program Files\Codefresh> aws eks describe-cluster --name codefresh-cluster
+{
+    "cluster": {
+        "name": "codefresh-cluster",
+        "arn": "arn:aws:eks:ap-south-1:934540042497:cluster/codefresh-cluster",
+        "createdAt": "2025-09-03T14:14:09.199000+05:30",
+        "version": "1.33",
+        "endpoint": "https://343F420B41ED0AE2F1E25AA6CEEF42B3.gr7.ap-south-1.eks.amazonaws.com",
+        "roleArn": "arn:aws:iam::934540042497:role/Codefresh-EKS-Cluster-Role",
+        "resourcesVpcConfig": {
+            "subnetIds": [
+                "subnet-0df155ef03c0c739a",
+                "subnet-0979c623fbf61fee9",
+                "subnet-04fcbf374d9540075"
+
+PS C:\Program Files\Codefresh> aws eks update-kubeconfig --region ap-south-1 --name codefresh-cluster
+Updated context arn:aws:eks:ap-south-1:934540042497:cluster/codefresh-cluster in C:\Users\tribh\.kube\config
+PS C:\Program Files\Codefresh>
+
+PS C:\Program Files\Codefresh> kubectl get svc
+NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+kubernetes   ClusterIP   10.100.0.1   <none>        443/TCP   142m
+
+PS C:\Program Files\Codefresh> kubectl get nodes
+NAME                  STATUS   ROLES    AGE     VERSION
+i-0434c931017a92a46   Ready    <none>   152m    v1.33.1-eks-f5be8fb
+i-0693a5a2cff2fdc9f   Ready    <none>   7m51s   v1.33.1-eks-f5be8fb
+PS C:\Program Files\Codefresh>
+
+
+
+c7i-flex.large
+
+<<<<<<<<<<<<<<<<<<<  Codefresh WebConsole >>>>>>>>>>>>>>>>>>>>>>>
+
+Tribhuvan@Tribhuvan_PC MINGW64 /c/Program Files/Codefresh
+$ kubectl get crd  | grep -E 'argoproj\.io|sealedsecrets\.bitnami\.com' && printf "\nERROR: Cluster needs cleaning\nUninstall the projects listed above\n" || echo "Cluster is clean. It's safe to install the GitOps Runtime"
+Cluster is clean. It's safe to install the GitOps Runtime
+
+Tribhuvan@Tribhuvan_PC MINGW64 /c/Program Files/Codefresh
+$ helm install cf-gitops-runtime \
+    --create-namespace \
+    --namespace codefresh \
+    --set global.codefresh.accountId=68b6a1d588edfd96a3934189 \
+    --set global.codefresh.userToken.token=68b8251ab2296411a1810d93.6ea3dbc887f4aa2521556317f41dd6af \
+    --set global.runtime.name=codefresh \
+    --set argo-workflows.controller.workflowDefaults.spec.artifactRepositoryRef.configMap="codefresh-workflows-log-store" \
+    --set argo-workflows.controller.workflowDefaults.spec.artifactRepositoryRef.key="codefresh-workflows-log-store" \
+    --set argo-workflows.controller.workflowDefaults.spec.archiveLogs=true \
+     oci://quay.io/codefresh/gitops-runtime
+Pulled: quay.io/codefresh/gitops-runtime:0.23.2
+Digest: sha256:3dc9774de6b3d2d7522d01274a6d43d14fe71dff44ecff73edc5dcde3bde4d05
+NAME: cf-gitops-runtime
+LAST DEPLOYED: Wed Sep  3 16:53:17 2025
+NAMESPACE: codefresh
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+GitOps Runtime codefresh has been successfully installed in your cluster!
+To complete the setup, please finalize the process in the platform here: https://g.codefresh.io/2.0/account-settings/runtimes/info/list?activeAccountId=68b6a1d588edfd96a3934189&drawer=install-runtime-wizard&mode=new&runtimeName=codefresh&waitEvents=true
+
+------------------------------------------------------------------------------------------------------------
+
+
+Github Codefresh Personal access tokens (classic)
+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
+
+==========================================================================================================================================
+Codefresh and minikube 
+
+https://minikube.sigs.k8s.io/docs/start/
+
+=> Minikube launched a local Kubernetes cluster inside Docker Desktop.
+=> Minikube is local only — not accessible from the internet (unlike AWS EKS). So Codefresh will only work if your local machine is always running Minikube. For production, you’d use EKS.
+
+Runtime & Namespace Name => codefresh-minikube
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+Tribhuvan@Tribhuvan_PC MINGW64 ~/Desktop
+$ kubectl get crd  | grep -E 'argoproj\.io|sealedsecrets\.bitnami\.com' && printf "\nERROR: Cluster needs cleaning\nUninstall the projects listed above\n" || echo "Cluster is clean. It's safe to install the GitOps Runtime"
+No resources found
+Cluster is clean. It's safe to install the GitOps Runtime
+
+Tribhuvan@Tribhuvan_PC MINGW64 ~/Desktop
+$ helm install cf-gitops-runtime \
+    --create-namespace \
+    --namespace codefresh-minikube \
+    --set global.codefresh.accountId=68b6a1d588edfd96a3934189 \
+    --set global.codefresh.userToken.token=68b95c613112fae1a1d13114.92d1b55408b9664bb321b3e12675e044 \
+    --set global.runtime.name=codefresh-minikube \
+    --set argo-workflows.controller.workflowDefaults.spec.artifactRepositoryRef.configMap="codefresh-workflows-log-store" \
+    --set argo-workflows.controller.workflowDefaults.spec.artifactRepositoryRef.key="codefresh-workflows-log-store" \
+    --set argo-workflows.controller.workflowDefaults.spec.archiveLogs=true \
+     oci://quay.io/codefresh/gitops-runtime
+Pulled: quay.io/codefresh/gitops-runtime:0.23.3
+Digest: sha256:c4c687bb294681fe7161b6a06639a661c4d4da44c2b4f7d8a5085dd1daeda26e
+NAME: cf-gitops-runtime
+LAST DEPLOYED: Thu Sep  4 15:01:36 2025
+NAMESPACE: codefresh-minikube
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+GitOps Runtime codefresh-minikube has been successfully installed in your cluster!
+To complete the setup, please finalize the process in the platform here: https://g.codefresh.io/2.0/account-settings/runtimes/info/list?activeAccountId=68b6a1d588edfd96a3934189&drawer=install-runtime-wizard&mode=new&runtimeName=codefresh-minikube&waitEvents=true
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+Nodes => Machines (VMs/servers) where your workloads run.
+A Kubernetes node can be:
+A worker node → runs your apps (pods).
+A control-plane node (master) → manages the cluster.
+Each node has CPU, memory, and networking resources.
+
+
+Example:-
+kubectl get nodes
+Output:-
+NAME            STATUS   ROLES    AGE   VERSION
+worker-node-1   Ready    <none>   10d   v1.28.0
+worker-node-2   Ready    <none>   10d   v1.28.0
+
+This means you have 2 machines where Kubernetes can schedule pods
+
+Pods => Smallest deployable unit in Kubernetes.
+A pod is one or more containers (usually Docker containers) that run together and share:
+Networking (same IP)
+Storage volumes
+Pods are scheduled onto nodes by the Kubernetes scheduler.
+
+Example:-
+kubectl get pods
+kubectl get pods -n default
+Output:-
+NAME                          READY   STATUS    RESTARTS   AGE
+nginx-deployment-5f9d6d44c5   1/1     Running   0          5m
+This means an nginx pod is running inside a container on one of our nodes.
+
+Think of it like:
+Nodes = Houses 🏠
+Pods = People 👨👩👧 living inside the houses
+Kubernetes (the scheduler) decides which person (pod) lives in which house (node).
+
+👉 So:
+kubectl get nodes → shows the infrastructure (machines).
+kubectl get pods → shows the workloads (apps/containers) running on those machines.
+
+
+PS C:\Windows\system32> codefresh version
+client version: 0.89.3
+
+choco install minikube kubernetes-cli -y
+PS C:\Windows\system32> kubectl version
+Client Version: v1.34.0
+Kustomize Version: v5.7.1
+Server Version: v1.33.1
+
+PS C:\Windows\system32>     minikube status
+minikube
+type: Control Plane
+host: Running
+kubelet: Running
+apiserver: Running
+kubeconfig: Configured
+
+
+choco install kubernetes-helm -y
+helm version
+
+
+PS C:\Windows\system32> minikube start
+* minikube v1.36.0 on Microsoft Windows 11 Home Single Language 10.0.22631.5624 Build 22631.5624
+* Automatically selected the docker driver. Other choices: hyperv, ssh
+* Using Docker Desktop driver with root privileges
+* Starting "minikube" primary control-plane node in "minikube" cluster
+* Pulling base image v0.0.47 ...
+* Downloading Kubernetes v1.33.1 preload ...
+    > preloaded-images-k8s-v18-v1...:  347.04 MiB / 347.04 MiB  100.00% 3.42 Mi
+    > gcr.io/k8s-minikube/kicbase...:  502.26 MiB / 502.26 MiB  100.00% 1.95 Mi
+* Creating docker container (CPUs=2, Memory=4000MB) ...
+! Failing to connect to https://registry.k8s.io/ from inside the minikube container
+* To pull new external images, you may need to configure a proxy: https://minikube.sigs.k8s.io/docs/reference/networking/proxy/
+* Preparing Kubernetes v1.33.1 on Docker 28.1.1 ...
+  - Generating certificates and keys ...
+  - Booting up control plane ...
+  - Configuring RBAC rules ...
+* Configuring bridge CNI (Container Networking Interface) ...
+* Verifying Kubernetes components...
+  - Using image gcr.io/k8s-minikube/storage-provisioner:v5
+* Enabled addons: storage-provisioner, default-storageclass
+* Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+PS C:\Windows\system32>
+
+Github Personal access tokens (classic)
+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
+
+
+Below three folder created automatically on github when we create runtime from codefresh web (local PC powershell & codefresh itself)
+git-sources
+resources
+runtimes
+
+PS C:\Windows\system32> kubectl config use-context minikube
+Switched to context "minikube".
+PS C:\Windows\system32> kubectl config current-context
+minikube
+PS C:\Windows\system32> kubectl get nodes
+NAME       STATUS   ROLES           AGE   VERSION
+minikube   Ready    control-plane   76m   v1.33.1
+
+[[[[[  Helm install failed earlier  ]]]]
+
+PS C:\Windows\system32> helm uninstall cf-gitops-runtime -n codefresh-minikube
+These resources were kept due to the resource policy:
+[CustomResourceDefinition] applications.argoproj.io
+[CustomResourceDefinition] applicationsets.argoproj.io
+[CustomResourceDefinition] appprojects.argoproj.io
+[CustomResourceDefinition] analysisruns.argoproj.io
+[CustomResourceDefinition] analysistemplates.argoproj.io
+[CustomResourceDefinition] clusteranalysistemplates.argoproj.io
+[CustomResourceDefinition] experiments.argoproj.io
+[CustomResourceDefinition] rollouts.argoproj.io
+[CustomResourceDefinition] clusterworkflowtemplates.argoproj.io
+[CustomResourceDefinition] cronworkflows.argoproj.io
+[CustomResourceDefinition] workflowartifactgctasks.argoproj.io
+[CustomResourceDefinition] workfloweventbindings.argoproj.io
+[CustomResourceDefinition] workflows.argoproj.io
+[CustomResourceDefinition] workflowtaskresults.argoproj.io
+[CustomResourceDefinition] workflowtasksets.argoproj.io
+[CustomResourceDefinition] workflowtemplates.argoproj.io
+
+release "cf-gitops-runtime" uninstalled
+
+and to install codefresh runtime execute the below helm command from gitbash and it will create a runtime and namespace
+
+$ helm install cf-gitops-runtime \
+    --create-namespace \
+    --namespace codefresh-minikube \
+    --set global.codefresh.accountId=68b6a1d588edfd96a3934189 \
+    --set global.codefresh.userToken.token=68b95c613112fae1a1d13114.92d1b55408b9664bb321b3e12675e044 \
+    --set global.runtime.name=codefresh-minikube \
+    --set argo-workflows.controller.workflowDefaults.spec.artifactRepositoryRef.configMap="codefresh-workflows-log-store" \
+    --set argo-workflows.controller.workflowDefaults.spec.artifactRepositoryRef.key="codefresh-workflows-log-store" \
+    --set argo-workflows.controller.workflowDefaults.spec.archiveLogs=true \
+     oci://quay.io/codefresh/gitops-runtime
+
+
+Note :-> when we stop/restart the our PC then minikube also stopped and we cant see any cluster so that time we need to execute the below command to start our minikube cluster.
+
+minikube start
+and the other commands for nodes and pods 
+
+PS C:\Windows\system32> kubectl get nodes
+NAME       STATUS   ROLES           AGE   VERSION
+minikube   Ready    control-plane   31h   v1.33.1
+PS C:\Windows\system32>
+
+PS C:\Windows\system32> kubectl get pods -A
+NAMESPACE            NAME                                                   READY   STATUS    RESTARTS      AGE
+codefresh-minikube   argo-cd-application-controller-0                       1/1     Running   1 (26m ago)   29h
+codefresh-minikube   argo-cd-applicationset-controller-6dd4d44dd9-qt6b6     1/1     Running   1 (26m ago)   29h
+codefresh-minikube   argo-cd-dex-server-7d67888d9b-4n4ts                    1/1     Running   1 (26m ago)   29h
+codefresh-minikube   argo-cd-redis-6b94dbbb7f-rrklp                         1/1     Running   1 (26m ago)   29h
+codefresh-minikube   argo-cd-repo-server-765bdc4cc9-p5nn4                   1/1     Running   1 (26m ago)   29h
+codefresh-minikube   argo-cd-server-6d6f4bb876-vd68q                        1/1     Running   1 (26m ago)   29h
+codefresh-minikube   argo-events-controller-manager-b98b8898f-jg7zt         1/1     Running   3 (26m ago)   29h
+codefresh-minikube   argo-rollouts-7856b9cddd-fl2cf                         1/1     Running   1 (26m ago)   29h
+codefresh-minikube   argo-server-5f6fd85df6-d7vms                           1/1     Running   1 (26m ago)   29h
+codefresh-minikube   argo-workflow-controller-5f9cdf644-z6pg9               1/1     Running   1 (26m ago)   29h
+codefresh-minikube   cap-app-proxy-5554bfc78-n2qrb                          1/1     Running   1 (26m ago)   29h
+codefresh-minikube   codefresh-tunnel-client-59bb489996-pvr78               1/1     Running   2 (15m ago)   29h
+codefresh-minikube   event-reporter-0                                       1/1     Running   1 (26m ago)   29h
+codefresh-minikube   event-reporter-1                                       1/1     Running   1 (26m ago)   29h
+codefresh-minikube   event-reporter-2                                       1/1     Running   1 (26m ago)   29h
+codefresh-minikube   eventbus-codefresh-eventbus-stan-0                     2/2     Running   2 (26m ago)   29h
+codefresh-minikube   eventbus-codefresh-eventbus-stan-1                     2/2     Running   2 (26m ago)   29h
+codefresh-minikube   eventbus-codefresh-eventbus-stan-2                     2/2     Running   2 (26m ago)   29h
+codefresh-minikube   events-webhook-d685d54c4-7q7pr                         1/1     Running   1 (26m ago)   29h
+codefresh-minikube   gitops-operator-86cfb65676-d8zpv                       1/1     Running   1 (26m ago)   29h
+codefresh-minikube   internal-router-574c58bdc7-dlkwx                       1/1     Running   3 (15m ago)   29h
+codefresh-minikube   rollout-reporter-eventsource-vpt75-76ddcb9d77-j7ftn    1/1     Running   1 (26m ago)   29h
+codefresh-minikube   rollout-reporter-sensor-q5v8l-8588fb858b-p62fd         1/1     Running   1 (26m ago)   29h
+codefresh-minikube   sealed-secrets-controller-6f6b5759df-x77qt             1/1     Running   1 (26m ago)   29h
+codefresh-minikube   sources-server-78b657855d-88hks                        1/1     Running   9 (15m ago)   29h
+codefresh-minikube   workflow-reporter-eventsource-7trhz-5d57cb9fdc-spp24   1/1     Running   1 (26m ago)   29h
+codefresh-minikube   workflow-reporter-sensor-9w5tc-7fd9dc775-85jpd         1/1     Running   1 (26m ago)   29h
+kube-system          coredns-674b8bbfcf-96s8h                               1/1     Running   1 (26m ago)   31h
+kube-system          etcd-minikube                                          1/1     Running   1 (26m ago)   31h
+kube-system          kube-apiserver-minikube                                1/1     Running   1 (26m ago)   31h
+kube-system          kube-controller-manager-minikube                       1/1     Running   2 (15m ago)   31h
+kube-system          kube-proxy-k5ht8                                       1/1     Running   1 (26m ago)   31h
+kube-system          kube-scheduler-minikube                                1/1     Running   1 (26m ago)   31h
+kube-system          storage-provisioner                                    1/1     Running   4 (15m ago)   31h
+
+==========================================================================================================================================

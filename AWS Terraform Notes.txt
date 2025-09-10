@@ -241,6 +241,66 @@ Note:- Multi tagging lab pending
 
 => Local variable
 
+Note:- {Terraform} => Its used when we want to deal with functionality not with providers
+
+What are Terraform locals?
+Local values (locals) are named values that you can use inside your Terraform configuration.
+They are useful for avoiding repetition and making your code cleaner.
+Unlike variables, locals cannot be overridden from command line or tfvars files. They are only for internal use.
+
+Example:-
+
+locals {
+  service_name = "forum"
+  owner        = "community-team"
+  environment  = "production"
+}
+
+resource "aws_instance" "web" {
+  ami           = "ami-12345678"
+  instance_type = "t3.micro"
+
+  tags = {
+    Name        = local.service_name
+    Owner       = local.owner
+    Environment = local.environment
+  }
+}
+
+
+=> Terraform operators & Expressions
+
+Calculation
+
+{Terraform} => Variable => locals => Output  
+
+=> Terraform Function
+Built-in functions that we can call from within expressions to transform and combine values.
+
+{Terraform} => Variable => locals => Output
+
+To find max number and min number, upper and lower case, startwith, split ,toset()(to remove duplicates), contains (), length() and join() etc....
+
+Note:- {Terraform} => Its used when we want to deal with functionality not with providers
+
+
+=> Terraform Multi-Resources
+
+-> Count    => Lab pending
+-> for_each =>used with mapp or set and within mapp its using key & value for object. => Lab pending
+
+=> Project (AWS IAM Mgt. )
+
+Task: AWS IAM Management
+· Provide user and roles info via YAML file
+. Read the YAML file and process data
+· Create IAM users
+· Generate Passwords for the users
+· Attach policy/roles to each users
+
+
+
+
 
 
 
