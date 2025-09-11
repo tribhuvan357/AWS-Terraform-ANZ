@@ -1,0 +1,7 @@
+users:
+  - username: Payal
+    roles: [AdministratorAccess, AmazonEC2FullAccess]
+  - username: Vidur
+    roles: [AdministratorAccess]
+  - username: Rinki
+    roles: [AmazonS3FullAccess]

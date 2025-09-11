@@ -286,10 +286,10 @@ Note:- {Terraform} => Its used when we want to deal with functionality not with 
 
 => Terraform Multi-Resources
 
--> Count    => Lab pending
--> for_each =>used with mapp or set and within mapp its using key & value for object. => Lab pending
+-> Count    => Lab done
+-> for_each =>used with mapp or set and within mapp its using key & value for object. => Lab Done
 
-=> Project (AWS IAM Mgt. )
+=> Project (AWS IAM Mgt.)
 
 Task: AWS IAM Management
 · Provide user and roles info via YAML file
@@ -297,6 +297,12 @@ Task: AWS IAM Management
 · Create IAM users
 · Generate Passwords for the users
 · Attach policy/roles to each users
+
+
+The flatten function in Terraform is used to transform a list of lists into a single, flat list.
+
+{ username = "raju", role = "AmazonEC2FullAccess" },
+{ username = "sham", role = "AmazonS3ReadOn lyAccess" }
 
 
 
