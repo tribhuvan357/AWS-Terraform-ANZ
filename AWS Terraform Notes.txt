@@ -305,6 +305,14 @@ The flatten function in Terraform is used to transform a list of lists into a si
 { username = "sham", role = "AmazonS3ReadOn lyAccess" }
 
 
+=> Terraform module
+
+
+Tribhuvan terraform custome aws vpc module
+https://registry.terraform.io/modules/tribhuvan357/vpc-test-module/aws/latest
+
+
+=> Testing our module
 
 
 
