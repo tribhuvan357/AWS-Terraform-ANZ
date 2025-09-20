@@ -311,14 +311,243 @@ The flatten function in Terraform is used to transform a list of lists into a si
 Tribhuvan terraform custome aws vpc module
 https://registry.terraform.io/modules/tribhuvan357/vpc-test-module/aws/latest
 
+Github tag command for terraform
+
+git tag "v1.0.0"
+git push --tags
 
 => Testing our module
 
+Lab done 
+Note:- add provider to the top of main.tf file where we keep module code
+And then add required details in same main.tf file like vpc and subnet details and execute it normally
+
+
+=> Terraform depends_on
+
+
+Terraform usually figures out the correct order automatically (called implicit dependency).But sometimes Terraform cannot detect the dependency → then you use depends_on (called explicit dependency) to tell Terraform:
+👉 “Wait for this resource before creating/destroying that resource.”
+
+Implicit Dependency (Automatic) => 
+
+resource "aws_vpc" "main" {
+  cidr_block = "10.0.0.0/16"
+}
+
+resource "aws_subnet" "main" {
+  vpc_id     = aws_vpc.main.id   # implicit dependency
+  cidr_block = "10.0.1.0/24"
+}
+
+=> Here above, aws_subnet.main implicitly depends on aws_vpc.main because it uses its id.
+Terraform knows it must create the VPC before the Subnet.
+
+Explicit Dependency (Manual) => 
+
+resource "aws_iam_role" "example" {
+  name = "my-role"
+}
+
+resource "aws_iam_role_policy_attachment" "example" {
+  role       = aws_iam_role.example.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+
+  depends_on = [aws_iam_role.example]   # explicit dependency
+}
+
+=> Here above "aws_iam_role_policy_attachment" is depends on "aws_iam_role" need to create first.
+
+
+
+=> Resource lifecycle
+
+Terraform resource lifecycle is about controlling how Terraform creates, updates, and destroys resources.
+We define lifecycle rules inside a lifecycle { ... } block in a resource. This tells Terraform how to treat that resource during changes.
+
+1️)create_before_destroy
+
+Ensures a new resource is created before destroying the old one.
+
+Useful when you want zero downtime.
+
+📌 Example:
+
+resource "aws_instance" "example" {
+  ami           = "ami-123456"
+  instance_type = "t2.micro"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+
+➡ If you change ami, Terraform will:
+
+Create a new instance.
+
+Destroy the old one after the new one is ready.
+(prevents downtime)
+
+2️)prevent_destroy
+
+Protects a resource from being accidentally destroyed.
+
+Terraform will throw an error if you try to destroy it.
+
+📌 Example:
+
+resource "aws_s3_bucket" "important" {
+  bucket = "my-production-bucket"
+
+  lifecycle {
+    prevent_destroy = true
+  }
+}
+
+
+➡ Even if you run terraform destroy, this bucket won’t be deleted unless you remove the lifecycle rule.
+
+3️)ignore_changes
+
+Tells Terraform to ignore changes to specific attributes.
+
+Useful when attributes are managed outside Terraform (like tags or passwords).
+
+📌 Example:
+
+resource "aws_instance" "example" {
+  ami           = "ami-123456"
+  instance_type = "t2.micro"
+  tags = {
+    Name = "server1"
+  }
+
+  lifecycle {
+    ignore_changes = [tags]
+  }
+}
+
+
+➡ If someone changes the tags in AWS console, Terraform won’t try to overwrite them.
+
+4️)replace_triggered_by (Terraform v1.1+)
+
+Forces recreation of a resource if another resource or attribute changes.
+
+📌 Example:
+
+resource "aws_instance" "example" {
+  ami           = "ami-123456"
+  instance_type = "t2.micro"
+
+  lifecycle {
+    replace_triggered_by = [
+      aws_security_group.sg.id
+    ]
+  }
+}
+
+
+➡ If the security group changes, Terraform will destroy and re-create this instance.
+
+🔹 Summary
+Lifecycle Rule	            Purpose
+create_before_destroy	Prevent downtime when replacing resources
+prevent_destroy	        Protect important resources from deletion
+ignore_changes	        Avoid Terraform overwriting manual changes
+replace_triggered_by	Recreate a resource when another changes
+
+
+✅ Best Practice
+
+Use prevent_destroy for critical resources like S3 buckets, databases.
+Use create_before_destroy for servers or load balancers where downtime is critical.
+Use ignore_changes when external systems update resources.
+
+
+
+=> Terraform validation (Pre-Conditions and Post-Conditions Resources)
+
+Allow you to define checks that must be true before a resource is created (precondition) and after a resource is created (postcondition).
 
 
 
 
+=> Terraform state modification
 
+State manipulation 
+
+· List all resources in the state:
+o terraform state list
+
+· Show details of a specific resource:
+o terraform state show <resource_address>
+
+· Move a resource to a different address:
+o terraform state mv <source_address> <destination_address>
+
+· Remove a resource from the state:
+o terraform state rm <resource_address>
+
+· Pull the current state:
+o terraform state pull
+
+· Push a local state file to the remote backend:
+o terraform state push <state_file>
+
+· List all state commands:
+o terraform state
+
+
+=> Terraform import command
+
+Terraform import is a command in Terraform that allows you to import existing infrastructure resources into your Terraform state.
+
+
+=> Terraform workspace
+
+Allows you to manage multiple sets of infrastructure configurations within a single configuration directory.
+
+Each workspace has its own state file	
+
+tfstate                     tfstate                      tfstate
+
+workspace-dev              workspace-test               workspace-prod
+
+
+                            tf-config
+							
+							
+							
+							
+· Listing Workspaces
+o terraform workspace list
+
+· Creating a Workspace
+terraform workspace new <workspace_name>
+
+· Selecting a Workspace
+o terraform workspace select <workspace_name>
+
+· Showing the Current Workspace
+o terraform workspace show
+
+· Deleting a Workspace
+o terraform workspace select default
+o terraform workspace delete <workspace_name>							
+======================================================================================================================================							
+
+=> Terraform Cloud 
+
+Terraform Cloud is a managed service provided by HashiCorp that facilitates collaboration on Terraform configurations.
+
+Providing features like
+· remote state management,
+· version control system (VCS) integration,
+· automated runs, and
+· secure variable management.
 
 
 
