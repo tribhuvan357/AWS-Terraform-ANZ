@@ -360,7 +360,7 @@ resource "aws_iam_role_policy_attachment" "example" {
 
 
 
-=> Resource lifecycle
+=> Terraform Resource lifecycle
 
 Terraform resource lifecycle is about controlling how Terraform creates, updates, and destroys resources.
 We define lifecycle rules inside a lifecycle { ... } block in a resource. This tells Terraform how to treat that resource during changes.
@@ -465,7 +465,6 @@ replace_triggered_by	Recreate a resource when another changes
 Use prevent_destroy for critical resources like S3 buckets, databases.
 Use create_before_destroy for servers or load balancers where downtime is critical.
 Use ignore_changes when external systems update resources.
-
 
 
 => Terraform validation (Pre-Conditions and Post-Conditions Resources)
